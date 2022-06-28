@@ -3,27 +3,41 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+<!--        variable we will use to gain access to our ViewModel's properties-->
+        <variable
+            name="viewModelXML"
+            type="com.example.easyviewmodelexample.MainViewModel" />
+    </data>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+<!--    Using DataBinding to set the onclick method to update our count-->
+<!--    "onClick" acts as setOnClickListener for our XML file to reduce code in Main.-->
+<!--    Every time the button clicks, it increments the count.-->
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Button"
+        android:text="@string/button"
+        android:onClick="@{() -> viewModelXML.updateCount()}"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
 
+<!--    Using DataBinding to update our TextView with the new number of clicks-->
+<!--    From our LiveData count variable in our ViewModel.-->
+<!--    Because we have to convert it to an Int, we use String.valueOf.-->
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="100dp"
-        android:text="0"
+        android:text="@{String.valueOf(viewModelXML.count)}"
         app:layout_constraintBottom_toTopOf="@+id/button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

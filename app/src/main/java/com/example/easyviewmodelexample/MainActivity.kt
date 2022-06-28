@@ -15,6 +15,8 @@ import com.example.easyviewmodelexample.databinding.ActivityMainBinding
  * In Main, we show how to declare a variable for our ViewModel;
  * Create an instance of our ViewModel in Main;
  * And then use the methods IN our ViewModel in Main to complete the task.
+ *
+ * We also demonstrate how to use LiveData, and ViewBinding.
  */
 class MainActivity : AppCompatActivity() {
 
@@ -34,23 +36,22 @@ class MainActivity : AppCompatActivity() {
          * just set the viewModel variable we declared = to the ViewModelProvider.
          * Say it's for this class, and then type the name of the ViewModel we made.
          */
-
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
-        // using apply so we do not have to type binding over and over again
+
         binding.apply {
+            /**
+             * Normally we would use "binding.ect" to assign our views.
+             * "apply {}" scope method extends the functionality of methods so
+             * we don't have to keep using binding. .
+             */
+            // assigning our ViewModel in our XML DataBinding to our MainViewModel
+            viewModelXML = viewModel
 
-            // referencing our ViewModel to observe the LiveData and its changes
-            viewModel.count.observe(this@MainActivity, Observer {
-                textView.text = it.toString()
-            })
+            // assigning our LifeCycleOwner for our LiveData to THIS class or Activity
+            // this allows us to use LiveData in our XML
+            lifecycleOwner = this@MainActivity
 
-            // set our button to click and update the count
-            button.setOnClickListener {
-                
-                // updating the count with the method from our ViewModel
-                viewModel.updateCount()
-            }
         }
     }
 }
