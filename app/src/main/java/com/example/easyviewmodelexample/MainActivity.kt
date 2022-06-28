@@ -3,6 +3,7 @@ package com.example.easyviewmodelexample
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.easyviewmodelexample.databinding.ActivityMainBinding
 
@@ -33,19 +34,22 @@ class MainActivity : AppCompatActivity() {
          * just set the viewModel variable we declared = to the ViewModelProvider.
          * Say it's for this class, and then type the name of the ViewModel we made.
          */
+
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
 
         // using apply so we do not have to type binding over and over again
         binding.apply {
 
-            // we reference our viewModel method return current count
-            textView.text = viewModel.returnCurrentCount().toString()
+            // referencing our ViewModel to observe the LiveData and its changes
+            viewModel.count.observe(this@MainActivity, Observer {
+                textView.text = it.toString()
+            })
 
             // set our button to click and update the count
             button.setOnClickListener {
                 
-                // reference our viewModel's returnUpdateCount method and set it
-                textView.text = viewModel.returnUpdatedCount().toString()
+                // updating the count with the method from our ViewModel
+                viewModel.updateCount()
             }
         }
     }
